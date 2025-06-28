@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pengumuman SMAGA</title>
+  <title>Pengumuman Seleksi CASIS SMAGA Jalur Prestasi 2025</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      background-image: url('https://github.com/SMAGA742/SMAGA/blob/main/Gerbang.jpg?raw=true'); /* Path file gambar */
       display: flex;
-    padding: 0 20px;
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-    background-image: url('https://github.com/SMAGA742/SMAGA/blob/main/Gerbang.jpg?raw=true'); /* Path file gambar */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     .container {
       background: white;
@@ -38,7 +37,7 @@
       margin-bottom: 5px;
       color: #333;
     }
-    .form-group input {
+    .form-group input, .form-group select {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
@@ -114,7 +113,8 @@
 <body>
   <div class="container">
     <div class="header">
-      <h2>Pengumuman Seleksi CASIS SMAGA Jalur Afirmasi,Domisili dan Mutasi 2025</h2>
+      
+      <h2>Pengumuman Seleksi CASIS SMAGA Jalur Prestasi 2025</h2>
     </div>
     <div class="form-group">
       <label class="required">NISN</label>
@@ -124,190 +124,189 @@
       <label class="required">Nama Lengkap</label>
       <input type="text" id="name" placeholder="Masukkan nama lengkap">
     </div>
-     <button onclick="generateAnnouncement()">Lihat Hasil</button>
-    <div class="timer" id="timer">HARI <span id="days">0</span> : JAM <span id="hours">00</span> : MENIT <span id="minutes">00</span> : DETIK <span id="seconds">00</span><br>HASIL SELEKSI AKAN DIBUKA TANGGAL 16 JUNI 2025 09:00 WITA</div>
+    <div class="form-group">
+      <label class="required">Jalur Pendaftaran</label>
+      <select id="jalur">
+        <option value="">Pilih Jalur</option>
+        <option value="Prestasi Keagamaan">Prestasi Keagamaan</option>
+        <option value="Prestasi Kepemimpinan">Prestasi Kepemimpinan</option>
+        <option value="Prestasi Akademik">Prestasi Akademik</option>
+        <option value="Prestasi Nilai Raport">Prestasi Nilai Raport</option>
+        <option value="Prestasi Non Akademik">Prestasi Non Akademik</option>
+      </select>
+    </div>
+    
+    <div class="timer" id="timer">HARI <span id="days">0</span> : JAM <span id="hours">00</span> : MENIT <span id="minutes">00</span> : DETIK <span id="seconds">00</span><br>HASIL SELEKSI AKAN DIBUKA TANGGAL 28 JUNI 2025 19:00 WITA</div>
     <div class="announcement" id="announcement"></div>
     <div class="error" id="errorMsg">Harap isi semua kolom dengan benar!</div>
   </div>
 
   <script>
-    let targetDate = new Date("2025-06-16T01:00:00Z").getTime(); // 16 Juni 2025, 09:00 WITA (UTC+7)
+    let targetDate = new Date("2025-06-28T11:00:00Z").getTime(); // 28 Juni 2025, 19:00 WITA (UTC+8)
 
-    // Data siswa yang lulus (contoh)
+    // Data siswa yang lulus dari semua jalur
     const passedStudents = [
-      // Jalur Mutasi
-            { nisn: "0102062765", nama: "NURHALISA HAER MULYANI" },
-            { nisn: "0101564106", nama: "MUH. ADZAKA ALBHI" },
-            { nisn: "0103413088", nama: "HUMAIRAH" },
-            { nisn: "0099147690", nama: "ANDI USWATUN NISA" },
-            // Jalur Afirmasi
-            { nisn: "0108925076", nama: "ANDI ARIEL BAKTI" },
-            { nisn: "0109423469", nama: "SRI AINUN INDRAWATI" },
-            { nisn: "0099657016", nama: "DINI HASTARI" },
-            { nisn: "0109524998", nama: "AULIA RAHMAN" },
-            { nisn: "0108364890", nama: "RIFKY SARWADI" },
-            { nisn: "0102253188", nama: "FARID AKBAR JAELANI" },
-            { nisn: "0101012413", nama: "LATIFAH AZSAHRAH RISWAN" },
-            { nisn: "0109699975", nama: "ANDI MAULIDA AZ-ZAHRA" },
-            { nisn: "0099488093", nama: "TENRI AMELIA" },
-            { nisn: "0097977307", nama: "MAHA DIKA PUTRA" },
-            { nisn: "0105184531", nama: "RISKY" },
-            { nisn: "0107169594", nama: "MUH. FAJRI" },
-            { nisn: "0098079953", nama: "ADRIYANA" },
-            { nisn: "0103871322", nama: "ISRA DELVAN" },
-            { nisn: "0097638161", nama: "AINUN AL FATUNNISA" },
-            { nisn: "0085291455", nama: "UGI ARYA SAPUTRA" },
-            { nisn: "0096003565", nama: "SITI ASMO" },
-            { nisn: "0107190014", nama: "ZELMAWATI" },
-            { nisn: "0108873863", nama: "ALQYA JENITA" },
-            { nisn: "0086526402", nama: "MASNI" },
-            { nisn: "0101473566", nama: "LISA WARDANA" },
-            { nisn: "0093035950", nama: "ANDI LENY ARYANI" },
-            { nisn: "0102768292", nama: "JUPRI TAUFIK" },
-            { nisn: "0099469055", nama: "WINDI" },
-            { nisn: "0107614639", nama: "NUR ALIM ADI PUTRA" },
-            { nisn: "0103997608", nama: "SAMSAIDATUL KARLA" },
-            { nisn: "0108970593", nama: "WIWI AULIA" },
-            { nisn: "0117253337", nama: "ANDI HAJAR" },
-            { nisn: "3093834568", nama: "ASWANDI" },
-            { nisn: "0107206647", nama: "AHMAD AIKAL" },
-            { nisn: "0099530906", nama: "SALSABILA" },
-            { nisn: "0101491988", nama: "NUR INZANA ERMAN" },
-            { nisn: "0105088619", nama: "ADE LAILATUL ZAHARA" },
-            { nisn: "0092606713", nama: "ISMA HUMUL LATIFAH" },
-            { nisn: "0109661899", nama: "TIWI ANASTASIA PUTRI" },
-            { nisn: "0109521381", nama: "SAHRA DEWI PUTRI" },
-            { nisn: "0109124392", nama: "IIS SAHRIANI" },
-            { nisn: "0106138386", nama: "ANDI SALSA" },
-            { nisn: "0093875631", nama: "NIRWANA" },
-            { nisn: "0104089821", nama: "SRIWAHYUNI" },
-            { nisn: "0106830092", nama: "SRI REJEKI" },
-            { nisn: "0102727163", nama: "SAPUTRI AULIA" },
-            { nisn: "0107735571", nama: "RIMA AMELIA SOFYAN" },
-            { nisn: "0102347169", nama: "UMAY SAPUTRA" },
-            { nisn: "0106981458", nama: "FATIMAH AZZAHRAH" },
-            // Jalur Domisili
-             { nisn: "0105067896", nama: "PUTRI ARNISA PRAHARA CINTA" },
-            { nisn: "0103334215", nama: "NUR RESKI INDRIYANI" },
-            { nisn: "0094680477", nama: "A. MUTIA SABRINA" },
-            { nisn: "0109736665", nama: "HAERIL ZAHRAMA" },
-            { nisn: "0095088613", nama: "FAUZYAH WAHYUNI PUTRI" },
-            { nisn: "0101381247", nama: "AMIRA JESYARISKA" },
-            { nisn: "0107186169", nama: "JULIATI SANDRA" },
-            { nisn: "0107365203", nama: "FIRMANSYAH" },
-            { nisn: "0104045483", nama: "DEFIAN APRILIO" },
-            { nisn: "0102864552", nama: "ISNAR RAMADHANI" },
-            { nisn: "0106628329", nama: "ASRIAL NUR" },
-            { nisn: "0082411698", nama: "DIAL AGOSTA" },
-            { nisn: "0092700514", nama: "ALFAN" },
-            { nisn: "0101171925", nama: "ADRIL FEBRIAN" },
-            { nisn: "0109690048", nama: "ANDI NURUL ALISYAH" },
-            { nisn: "0105355258", nama: "DILLA MEYLANI" },
-            { nisn: "0109359058", nama: "FAIZAL BAHRI" },
-            { nisn: "0093402842", nama: "ALFIN" },
-            { nisn: "0104781463", nama: "HAFIZH AHMAD DZAKI" },
-            { nisn: "0109851131", nama: "WULAN RAMADHANI PUTRI" },
-            { nisn: "0104261565", nama: "ASYIFA UTAMI HASRI" },
-            { nisn: "0104833377", nama: "SULPIANA" },
-            { nisn: "0108832293", nama: "FEBRINA" },
-            { nisn: "0108549021", nama: "NAJLA MUTMAINNA" },
-            { nisn: "0093231230", nama: "ANGELY GISVA DENOIX" },
-            { nisn: "0105287588", nama: "BRILLIANT EKA PUTRA" },
-            { nisn: "0095386975", nama: "INDRA YUDA" },
-            { nisn: "0102872896", nama: "ANISA APRILIANI" },
-            { nisn: "0101935156", nama: "ALIL" },
-            { nisn: "0103333191", nama: "ANDI REZKY AMELIA" },
-            { nisn: "0092270873", nama: "FAIZ" },
-            { nisn: "0103760313", nama: "MAYANTI" },
-            { nisn: "0101105958", nama: "KUMAERA" },
-            { nisn: "0105043639", nama: "PANDI PRATAMA" },
-            { nisn: "0099671649", nama: "IKRAM" },
-            { nisn: "0103556077", nama: "RAFIF  ABQARY ZAENY" },
-            { nisn: "0094326327", nama: "ALIYA JUNIA ALITA" },
-            { nisn: "0103350173", nama: "ANDI SOPIE SALSABILA" },
-            { nisn: "0108344622", nama: "JENI PUTRI UTAMI" },
-            { nisn: "0108735976", nama: "NURPADILA" },
-            { nisn: "0102592522", nama: "RIDHO AL FIKRI" },
-            { nisn: "0106067932", nama: "SITI KHUMAHERA" },
-            { nisn: "0104331830", nama: "EDWY MUH.RIFAL" },
-            { nisn: "0098301328", nama: "ZUL FITRI" },
-            { nisn: "0109637762", nama: "JUSNADI" },
-            { nisn: "0092587590", nama: "ANDI IKRAR PUJA APDY" },
-            { nisn: "0104484788", nama: "ANDI IRSYAD FADHIL PASBAL" },
-            { nisn: "0104999858", nama: "AWDY RAFFI ALBAD" },
-            { nisn: "0102735954", nama: "APRIL AULIA TASDI" },
-            { nisn: "0102763091", nama: "YUSRY" },
-            { nisn: "0107061603", nama: "RYAN PUTRA" },
-            { nisn: "0099279014", nama: "PUTRA PRATAMA" },
-            { nisn: "0103211211", nama: "ANDI FAUZIAH SYAHRANI" },
-            { nisn: "3107605993", nama: "ARUMI AINUNNISA" },
-            { nisn: "0098104785", nama: "MUH. SAHRUL RAMADHAN" },
-            { nisn: "0098567637", nama: "NUR AFIKA" },
-            { nisn: "0094459791", nama: "REYHAN SETIAWAN" },
-            { nisn: "0105531810", nama: "AHMAD SETIAWAN" },
-            { nisn: "0094923083", nama: "AYU ANDIRA" },
-            { nisn: "0092926666", nama: "ALMADINA RESKIANA" },
-            { nisn: "0109906243", nama: "AMELINDA HAMDAYANI" },
-            { nisn: "0095862711", nama: "AINI NUR RAHMA AMELIA" },
-            { nisn: "0101911950", nama: "PUTRY" },
-            { nisn: "0096596632", nama: "SURIYA" },
-            { nisn: "0105089452", nama: "ANIN DIVA ZAHLIANTI" },
-            { nisn: "0101585795", nama: "ANRIAN DANI" },
-            { nisn: "0092919990", nama: "SELLY SULASTRI" },
-            { nisn: "0109002175", nama: "AGIL HIDAYAT" },
-            { nisn: "0092598354", nama: "HASRI YANA" },
-            { nisn: "3093649136", nama: "ALDIKA ARIANTO PUTRA" },
-            { nisn: "0096645064", nama: "NAYRA ANNISA KIRANI" },
-            { nisn: "0092333180", nama: "RIDHO SEPTIAWAN" },
-            { nisn: "0105261303", nama: "TATRI AMRITA" },
-            { nisn: "0106283326", nama: "SHERA REGINA" },
-            { nisn: "0109088249", nama: "ABSARI FARHAT" },
-            { nisn: "0107691992", nama: "JABAL NUR" },
-            { nisn: "0104115563", nama: "FARHAN MUBARAAK" },
-            { nisn: "0108395346", nama: "SYARWANA" },
-            { nisn: "0107958549", nama: "SANDRA ANGGRAINI" },
-            { nisn: "0097284478", nama: "RIZKY RAMADHANI" },
-            { nisn: "0115905201", nama: "ALFINA" },
-            { nisn: "3102576320", nama: "RESKI" },
-            { nisn: "0109968630", nama: "ISMAIL" },
-            { nisn: "0099591788", nama: "MUH. FAHRUL GUNTUR" },
-            { nisn: "0105502701", nama: "NACITA PUTRI" },
-            { nisn: "0109910050", nama: "NUR HALIFAH" },
-            { nisn: "0093372750", nama: "SYLMIRANDA" },
-            { nisn: "0087982101", nama: "N A I L A" },
-            { nisn: "0095148634", nama: "AYU ANDIRA JURA" },
-            { nisn: "0097497998", nama: "ALIF YUNISTIRA" },
-            { nisn: "3105388164", nama: "NURKAIYISAH" },
-            { nisn: "3081839368", nama: "SUCI INDAH SARI" },
-            { nisn: "0105103293", nama: "RAWDIYAH APRILIA" },
-            { nisn: "0107686541", nama: "HIJRAH FITRIAH" },
-            { nisn: "0102119400", nama: "A. MUH. AZRI" },
-            { nisn: "0102637394", nama: "RAFLY REY GUNAWAN" },
-            { nisn: "0091547669", nama: "MUH. IZHAR RISKY OKTAPUTRA" },
-            { nisn: "0093919233", nama: "NUR DIAN " },
-            { nisn: "0103181333", nama: "WIDYASTUTI" },
-            { nisn: "0102753260", nama: "NAYLA ANGELIKA" },
-            { nisn: "0118976364", nama: "ZYARAH MASITA" },
-            { nisn: "0086672730", nama: "REHANG" },
-            { nisn: "3095329277", nama: "MUH ANDIKA ADITIA ASNUR" },
-            { nisn: "0097046113", nama: "PRITA" },
-            { nisn: "0093795253", nama: "NURUL HUDA" },
-            { nisn: "0103550690", nama: "RIFQY CHANDRA WIJAYA" },
-            { nisn: "0104070841", nama: "AMANDA PUTRI" },
-            { nisn: "0106312166", nama: "ALFIANITA" },
-            { nisn: "0091107714", nama: "DEWA ANGGARA" },
-            { nisn: "0104529710", nama: "ANDI NAYLA PRATIWI" },
-            { nisn: "0109133990", nama: "NURAENI SAFIKA" },
-            { nisn: "0101431142", nama: "RIRIS AULIA" },
-            { nisn: "0096177370", nama: "REYHAN DWI PUTRA"},
-            { nisn: "0109519351", nama: "ANDI ELZA REGINA PUTRI" }
-
-
-        ];
-      
-
-
-
+      { nisn: "0104711729", name: "MUH. PADIL", jalur: "Prestasi Keagamaan" },
+      { nisn: "0095605934", name: "KASMIRANDAH", jalur: "Prestasi Keagamaan" },
+      { nisn: "0099855976", name: "MUH. FAIZ AL MUBARAQ", jalur: "Prestasi Keagamaan" },
+      { nisn: "0105307968", name: "INDRI SALSABILLAH", jalur: "Prestasi Keagamaan" },
+      { nisn: "0109349917", name: "FEBRIANSYAH", jalur: "Prestasi Keagamaan" },
+      { nisn: "0091235193", name: "SITTI CHADIJAH", jalur: "Prestasi Keagamaan" },
+      { nisn: "0109606214", name: "FAJAR ASWAD TAMRIN", jalur: "Prestasi Keagamaan" },
+      { nisn: "0093225516", name: "AGUS WAHYU ANGGORO", jalur: "Prestasi Keagamaan" },
+      { nisn: "0102679180", name: "RIRIN TRI AMANDA", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0097168128", name: "ALFIRA KHAIRUNNISYA", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0098842217", name: "ANUGRAH RAMADHAN", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0103227435", name: "LISA HAMRIANI", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0109632105", name: "NOVI ASRIDA", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0107089238", name: "NURHAERANI", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0103595816", name: "SALWA ALIFIAH", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0109979803", name: "ATTHALLAH AZZAM", jalur: "Prestasi Kepemimpinan" },
+      { nisn: "0097935524", name: "RYZKA ARIADI TASMA", jalur: "Prestasi Akademik" },
+      { nisn: "0098238543", name: "NURHIJRAH ERLI ASTUTI", jalur: "Prestasi Akademik" },
+      { nisn: "0099231315", name: "NUR AIN", jalur: "Prestasi Akademik" },
+      { nisn: "0106748449", name: "NOVITA", jalur: "Prestasi Akademik" },
+      { nisn: "0099989293", name: "NABILA PUTRI ARISMAN", jalur: "Prestasi Akademik" },
+      { nisn: "3091706257", name: "CINTA AINI", jalur: "Prestasi Akademik" },
+      { nisn: "0108155412", name: "JUSDEWI", jalur: "Prestasi Akademik" },
+      { nisn: "0101618085", name: "RISKA AULIYA", jalur: "Prestasi Akademik" },
+      { nisn: "3095822405", name: "ANDI ISMI RAHMAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098643855", name: "AINUN JARIYAH RAMADHANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092883370", name: "HESTI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092238562", name: "KESYA SASKIA OLIVIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092408108", name: "AINANI TAJRIYAN RAMADHANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3086598002", name: "NURWAHIDAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0075211388", name: "SELVI CANDRA MELINTON", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0104558280", name: "INDILAH KHAIRUN MUKTI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0095042068", name: "RIRIN AMELDA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103465606", name: "IVA RAMADANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092480264", name: "RIZQI ADITIA SYAM", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0109168894", name: "AMELIA NUR RAHMA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102546669", name: "ANNIZA FITRI MAULIDYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092177676", name: "ANDIRA RAMADANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0094556208", name: "ZULFIKAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0107048426", name: "NUR IKHSAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0109937862", name: "KARMILA SARI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0091573364", name: "NOVITA NUR RIFAI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0094296835", name: "DESWITA ADINDA PUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3096412537", name: "ASLINDAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0104457734", name: "SILFA NURFADILA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101901934", name: "NUR SISKA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101375753", name: "MUH NUR AIMAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103331000", name: "FAJRI APRILIYAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106144332", name: "NAURA JUNITA R", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102605202", name: "PUTRI HANDAYANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102590753", name: "MUH NUR AIMIN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0099053448", name: "KHARISMA NUR ARIFAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101615848", name: "RAIHANUM AGYUNINA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0097738292", name: "YASSIR AMRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106388237", name: "OLIVIA LISNAYANTI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0094683576", name: "SAFIRA AMALIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102994638", name: "RISKI ARIEL FEBRIAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101799250", name: "MAUDI ANGELIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0105950448", name: "ZAHWA SALSABILA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108452226", name: "ANUGERAH FEBRARI ARMAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103826041", name: "NURUL HIJRAH SARTINA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098453677", name: "DILMAS SATRIAGUS MASDAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0096798071", name: "LUNANDA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0107769036", name: "APRILIA TRI HAPSARI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103289230", name: "WARHAM", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103553036", name: "NIZAM KURNIALAM", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0109926569", name: "HILAL", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0105802261", name: "RADITYA ALFAREZAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101295894", name: "RAZWA ARIBIAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3092779273", name: "ILHAM SETIAWAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106089000", name: "ABDIZAR ALGIFARY", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108819951", name: "KAYLA MAULIDA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108431179", name: "M.FEBRIANSYAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103801139", name: "RANGGA SHENA SATRIA GHIZWA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0104063274", name: "ANDI ASTIKA BAHRUL", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0119656484", name: "RESKI AULIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092841759", name: "NADIN ARNELIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103097587", name: "FIKRI NURHIDAYAT", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102798622", name: "SABRINA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103680688", name: "ALIANA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3095113027", name: "RAHMAT RENALDI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106432725", name: "AIRIN NAHDA AULYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0119956966", name: "ARINI AMRIANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101246764", name: "ANDI FIRYAL ADZANIRAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103996785", name: "WANDA MERSITA NUR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106720307", name: "REZKY REGINA PUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106810691", name: "ANDINI PUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106132609", name: "SYIFATUL SAUSAN JAMAL", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0096721185", name: "ASHILAH LATHIFAH.R", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0107172424", name: "AFDAL AFANDI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106849392", name: "DHENI DIBA ARIANSYAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0093752683", name: "ASLAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103868299", name: "BINTANG SAPUTRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3105711127", name: "ILHAM ARYA PUTRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0082657910", name: "RISNAYANTI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3096291529", name: "FAUZIL ADIL", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0107665819", name: "MUHAMMAD FARHAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108723276", name: "HILWAN PRATAMA HANOV", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106786176", name: "MUH. SYADLY", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0087302524", name: "ALMAWI RESKIAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108844192", name: "RIFKA INAYAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0109379370", name: "FAUSI ASTARI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0094146754", name: "AHMAD SURYADI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102605650", name: "NURUL FITRIYA RAMADANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098846812", name: "NAIFAH NOVITARANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0104089570", name: "SASPRITA KEY FADIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3105293648", name: "BEBY IRMAYANTI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106922268", name: "SABRINA AWALIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0093683002", name: "AIRA OKTAVIANA DWI SANJAYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0105503770", name: "DILLA REGINA PUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101409604", name: "ROSELA FIROS", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101692433", name: "AIDIL AKBAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098929316", name: "ARYAGUNA AMRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0094219805", name: "FITRAH RAMADHANA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106338318", name: "SRY REGINA NIRSYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0099158316", name: "ANDIS DG NGERANG", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0107255478", name: "FEBRI ANATASYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092874824", name: "MUH. FIKRI IBRAHIM", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108575941", name: "APRILIA TIPANY", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108656886", name: "MUH. INDRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0108581726", name: "AULIA DEWI FATIMA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3108117991", name: "ALI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106697263", name: "AYU ANDIRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0109598306", name: "NUR ANNISAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092231903", name: "ASWANDI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3103573596", name: "INDRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0096890275", name: "ERWIN ARDIANSA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103512316", name: "SOFIA NINGSIH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3104958723", name: "MUH. GAIZAN NASIR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0097467347", name: "ANDI ZAMIL ASGAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102204535", name: "AUREL NATASYA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3106547792", name: "SIVANA FEBRIA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0074739145", name: "RISKA AULYA PUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0088379971", name: "EMI GUSITA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0091253868", name: "DESWITA MAHARANI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102216889", name: "MUH. ISRAQ ASHAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0083950394", name: "ALIF KURNIAWAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3081277263", name: "AKBAR BIN AGUS", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0106980194", name: "RIZKY MEIRALDY UTAMA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098526288", name: "INRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3105726140", name: "A. AULIA IZZATUNNISA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0102036137", name: "FADIA ANINDITA KASNUR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3113356142", name: "ASTRY ASMAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103741755", name: "RESKY ANUGRAH RISMAN", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0101761666", name: "KHAIRIL AKBAR", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0103485738", name: "AQILA PUTRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3094556315", name: "NASRIL", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0098199640", name: "NURSYAIDAH", jalur: "Prestasi Nilai Raport" },
+      { nisn: "3111802781", name: "NABIL ADRIAN PRATAMA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0091123447", name: "CHYNTA NABILA AZ ZAHRA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0096703473", name: "MILDA SAPUTRI", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0092980329", name: "ANDI RISKI DAENG MALAJA", jalur: "Prestasi Nilai Raport" },
+      { nisn: "0105515965", name: "SYAHRIAL", jalur: "Prestasi Non Akademik" },
+      { nisn: "0105285938", name: "AWAN RIZKI PUTUT HANDOKO", jalur: "Prestasi Non Akademik" },
+      { nisn: "0114868408", name: "KARTIKA SANRAH", jalur: "Prestasi Non Akademik" },
+      { nisn: "0091400542", name: "MUH. NUR AL FAJRI", jalur: "Prestasi Non Akademik" },
+      { nisn: "0094747235", name: "MUHAMMAD ALMAIDIN", jalur: "Prestasi Non Akademik" },
+      { nisn: "0093048418", name: "DHINA MEKAR SARI", jalur: "Prestasi Non Akademik" },
+      { nisn: "0097424543", name: "ARGA RAMADHAN", jalur: "Prestasi Non Akademik" },
+      { nisn: "0118167074", name: "ABDIL HILAL", jalur: "Prestasi Non Akademik" }
+    ];
 
     function updateTimer() {
       let now = new Date().getTime();
@@ -315,7 +314,7 @@
 
       if (distance < 0) {
         clearInterval(timerInterval);
-        document.getElementById("timer").textContent = "HASIL SELEKSI 2025 SUDAH DIBUKA!";
+        document.getElementById("timer").textContent = "HASIL SELEKSI AKAN DIBUKA!";
         return;
       }
 
@@ -335,45 +334,43 @@
     function generateAnnouncement() {
       let nisn = document.getElementById("nisn").value.trim();
       let name = document.getElementById("name").value.trim();
+      let jalur = document.getElementById("jalur").value;
       let errorMsg = document.getElementById("errorMsg");
       let announcement = document.getElementById("announcement");
 
       // Validasi input
-      if (!nisn || !name) {
+      if (!nisn || !name || !jalur) {
         errorMsg.style.display = "block";
         announcement.style.display = "none";
         return;
       }
       errorMsg.style.display = "none";
 
-      let student = passedStudents.find(s => s.nisn === nisn && s.nama.toUpperCase() === name.toUpperCase());
+      let student = passedStudents.find(s => s.nisn === nisn && s.name.toUpperCase() === name.toUpperCase() && s.jalur === jalur);
 
       if (student) {
         announcement.innerHTML = `
-          <h2>SELAMAT! ANDA DINYATAKAN LULUS SELEKSI 2025</h2>
+          <h2>SELAMAT! ANDA DINYATAKAN LULUS SELEKSI CASIS SMAGA 2025</h2>
           <p>NISN ${nisn}</p>
           <p><strong>${name.toUpperCase()}</strong></p>
-          <div class="info">Silakan lakukan pendaftaran ulang.<br>Informasi pendaftaran ulang di SMAN 3 BULUKUMBA dapat dilihat pada link berikut: <br>https://sman3bulukumba.com/</div>
+          <p>Jalur: ${jalur}</p>
+          <div class="info">Silakan lakukan pendaftaran ulang. Informasi lebih lanjut dapat dilihat di situs resmi SMAGA.</div>
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <div id="qrcode" style="margin-top: 10px;"></div>
-
+            <div class="qr-code"></div>
           </div>
         `;
       } else {
         announcement.innerHTML = `
-          <h2>JANGAN PUTUS ASA DAN TETAP SEMANGAT! MASIH BANYAK JALUR YANG LAIN.ANDA DINYATAKAN TIDAK LULUS SELEKSI 2025</h2>
+          <h2>MAAF! ANDA BELUM DINYATAKAN LULUS SELEKSI CASIS SMAGA 2025</h2>
           <p>NISN ${nisn}</p>
           <p><strong>${name.toUpperCase()}</strong></p>
-          <div class="info" style="background-color: #fff3f3;">Kembali ke pencarian.</div>
-          
-
+          <p>Jalur: ${jalur}</p>
+          <div class="info" style="background-color: #fff3f3;">Silakan lakukan verifikasi data lebih lanjut.</div>
         `;
         announcement.classList.add("failed");
       }
       announcement.style.display = "block";
     }
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 </body>
 </html>
